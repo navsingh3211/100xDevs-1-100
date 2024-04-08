@@ -1,15 +1,21 @@
 import axios from 'axios';
+import { PrismaClient } from '@prisma/client';
+
+const client = new PrismaClient();
 
 async function getUserDetails() {
-  new Promise((resolve,reject)=>{
-    setTimeout(()=>{
-
-    },3000);
-  })
-  // const response = await axios.get("https://week-13-offline.kirattechnologies.workers.dev/api/v1/user/details");
-  const response = await axios.get("http://localhost:3000/api/user");
-
-	return response.data;
+  try{
+    const user = await client.user.findMany({
+      where:{
+        id:3
+      }
+    });
+    console.log(user,'user');
+    
+    return { username: user[0]?.username, password: user[0]?.password }
+  }catch(error){
+    console.log(error);
+  }
 }
 
 export default async function Home() {
